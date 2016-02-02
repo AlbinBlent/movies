@@ -17,9 +17,8 @@ public class StoreMovieBean {
     }
 
     public void storeMovie(Exchange exchange) throws MovieAlreadyExistsInDBException {
-        System.out.printf(String.valueOf(exchange.getIn().getBody(MovieModel.class)));
         String newMovieName = exchange.getIn().getBody(MovieModel.class).getMovieName();
         movieHandler.storeMovie(newMovieName);
-        System.out.println("Stored new movie : " + newMovieName + " to the movie DB");
+        System.out.println("Stored new movie: " + newMovieName + " to the movie DB");
     }
 }

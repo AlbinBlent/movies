@@ -20,10 +20,7 @@ public class MovieHandler {
 
     public void storeMovie(String newMovieTitle) throws MovieAlreadyExistsInDBException {
 
-        System.out.println(newMovieTitle);
-
         if (storage.movieAlreadyInStorage(newMovieTitle)) {
-            System.out.printf("in teh if");
             throw new MovieAlreadyExistsInDBException(newMovieTitle);
         }
 

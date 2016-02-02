@@ -16,6 +16,6 @@ public class GetAllMoviesBean {
 
     public void getAllMovies(Exchange exchange){
        exchange.getOut().setBody(movieHandler.getAllMovies());
-        System.out.printf("User fetched all movies");
+        System.out.println("User fetched all movies");
     }
 }

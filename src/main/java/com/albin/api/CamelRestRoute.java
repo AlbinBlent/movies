@@ -68,15 +68,7 @@ public class CamelRestRoute extends RouteBuilder{
                     .bean(new GetMovieBean(movieHandler))
                 .doCatch(NoSuchMovieFoundException.class)
                     .log("No such movie found exception raised")
-                    .process(new Processor() {
-                        @Override
-                        public void process(Exchange exchange) throws Exception {
-                            Integer id = exchange.getIn().getHeader("id", Integer.class);
-                            System.err.println("Could not find movie with id: " + id);
-                            exchange.getOut().setBody("Movie not found");
-                            exchange.getOut().setHeader(Exchange.HTTP_RESPONSE_CODE, 404);
-                        }
-                    })
+                    .process(new NoSuchMovieFoundProcessor())
                 .end();
 
         from("direct:storeMovie")
@@ -86,15 +78,7 @@ public class CamelRestRoute extends RouteBuilder{
                     .bean(new StoreMovieBean(movieHandler))
                 .doCatch(MovieAlreadyExistsInDBException.class)
                     .log("Movie already in storage")
-                    .process(new Processor() {
-                        @Override
-                        public void process(Exchange exchange) throws Exception {
-                            String newMovieName = exchange.getIn().getBody(MovieModel.class).getMovieName();
-                            System.err.println("Movie: " + newMovieName + " already exists in the storage");
-                            exchange.getOut().setBody("Movie already in storage");
-                            exchange.getOut().setHeader(Exchange.HTTP_RESPONSE_CODE, 404);
-                        }
-                    })
+                    .process(new MovieAlreadyExistsInDBProcessor())
                 .end();
 
         from("direct:retrieveAllMovies")
