@@ -31,6 +31,11 @@ public class InMemoryStorage implements IStore {
         return false;
     }
 
+    @Override
+    public void removeMovie(int movieId) {
+       movieCollection.remove(movieId);
+    }
+
     public MovieModel getMovie(int movieId) {
         return movieCollection.get(movieId);
     }

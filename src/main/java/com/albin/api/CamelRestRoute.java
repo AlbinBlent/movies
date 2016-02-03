@@ -59,13 +59,14 @@ public class CamelRestRoute extends RouteBuilder{
 
                 .get("get-movie/{id}").to("direct:retrieveMovie")
                 .get("get-all-movies").to("direct:retrieveAllMovies")
-                .post("add-movie").type(MovieModel.class).to("direct:storeMovie");
+                .post("add-movie").type(MovieModel.class).to("direct:storeMovie")
+                .delete("remove-movie/{id}").to("direct:removeMovie");
 
         from("direct:retrieveMovie")
                 .log("client called retrieveMovie")
                 .doTry()
                     .log("movie sent to client")
-                    .bean(new GetMovieBean(movieHandler))
+                    .bean(new MovieBean(movieHandler), "getMovie")
                 .doCatch(NoSuchMovieFoundException.class)
                     .log("No such movie found exception raised")
                     .process(new NoSuchMovieFoundProcessor())
@@ -75,14 +76,23 @@ public class CamelRestRoute extends RouteBuilder{
                 .log("client called storeMovie")
                 .doTry()
                     .log("movie stored to DB")
-                    .bean(new StoreMovieBean(movieHandler))
+                    .bean(new MovieBean(movieHandler), "storeMovie")
                 .doCatch(MovieAlreadyExistsInDBException.class)
-                    .log("Movie already in storage")
+                    .log("movie already in storage")
                     .process(new MovieAlreadyExistsInDBProcessor())
                 .end();
 
         from("direct:retrieveAllMovies")
                 .log("client called retrieveAllMovies")
-                .bean(new GetAllMoviesBean(movieHandler));
+                .bean(new MovieBean(movieHandler), "getAllMovies");
+
+        from("direct:removeMovie")
+                .log("client called removeMovie")
+                .doTry()
+                    .bean(new MovieBean(movieHandler), "removeMovie")
+                .doCatch(NoSuchMovieFoundException.class)
+                    .log("No such movie found exception raised")
+                    .process(new NoSuchMovieFoundProcessor())
+                .end();
     }
 }

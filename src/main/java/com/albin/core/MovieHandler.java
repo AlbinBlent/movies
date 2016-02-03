@@ -36,4 +36,10 @@ public class MovieHandler {
     public Collection<MovieModel> getAllMovies(){
         return storage.getAllMovies();
     }
+
+    public void removeMovie(Integer movieId) throws NoSuchMovieFoundException {
+        if (storage.getMovie(movieId) == null)
+            throw new NoSuchMovieFoundException(movieId);
+        storage.removeMovie(movieId);
+    }
 }

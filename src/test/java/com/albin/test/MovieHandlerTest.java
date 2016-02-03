@@ -64,4 +64,16 @@ public class MovieHandlerTest {
         // vet inte hur jag ska fixa det här testet, funktionaliteten funkar när man testar API:t från client
     }
     */
+
+    @Test
+    public void removeMovie_removes_a_movie() throws NoSuchMovieFoundException {
+        when(storageMock.getMovie(1)).thenReturn(new MovieModel(1,"bond"));
+        movieHandler.removeMovie(1);
+        verify(storageMock, times(1)).removeMovie(1);
+    }
+
+    @Test(expected = NoSuchMovieFoundException.class)
+    public void trying_to_remove_a_movie_that_does_not_exist_throws_a_NoSuchMovieFoundException() throws NoSuchMovieFoundException {
+        movieHandler.removeMovie(1337);
+    }
 }

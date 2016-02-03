@@ -12,4 +12,5 @@ public interface IStore {
     public MovieModel getMovie(int movieId);
     public Collection<MovieModel> getAllMovies();
     public boolean movieAlreadyInStorage(String movieTitle);
+    public void removeMovie(int movieId);
 }

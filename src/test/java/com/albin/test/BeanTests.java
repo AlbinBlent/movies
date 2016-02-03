@@ -28,8 +28,8 @@ public class BeanTests {
     }
 
     @Test
-    public void getMovieBean_should_return_a_movie() throws NoSuchMovieFoundException {
-        GetMovieBean getMovieBean = new GetMovieBean(movieHandler);
+    public void getMovie_should_return_a_movie() throws NoSuchMovieFoundException {
+        MovieBean getMovieBean = new MovieBean(movieHandler);
         CamelContext ctx = new DefaultCamelContext();
         Exchange exchange = new DefaultExchange(ctx);
         exchange.getIn().setHeader("id",1);
@@ -38,8 +38,8 @@ public class BeanTests {
     }
 
     @Test
-    public void storeMovieBean_should_store_a_movie_to_the_DB() throws MovieAlreadyExistsInDBException {
-        StoreMovieBean storeMovieBean = new StoreMovieBean(movieHandler);
+    public void storeMovien_should_store_a_movie_to_the_DB() throws MovieAlreadyExistsInDBException {
+        MovieBean storeMovieBean = new MovieBean(movieHandler);
         CamelContext ctx = new DefaultCamelContext();
         Exchange exchange = new DefaultExchange(ctx);
         MovieModel newMovie = new MovieModel(99, "Star Wars IV");
@@ -49,12 +49,22 @@ public class BeanTests {
     }
 
     @Test
-    public void getAllMoviesBean_should_return_all_movies_in_DB(){
-        GetAllMoviesBean getAllMoviesBean = new GetAllMoviesBean(movieHandler);
+    public void getAllMovies_should_return_all_movies_in_DB(){
+        MovieBean getAllMoviesBean = new MovieBean(movieHandler);
         CamelContext ctx = new DefaultCamelContext();
         Exchange exchange = new DefaultExchange(ctx);
         getAllMoviesBean.getAllMovies(exchange);
         verify(movieHandler, times(1)).getAllMovies();
 
+    }
+
+    @Test
+    public void removeMovie_should_remove_a_movie() throws NoSuchMovieFoundException {
+        MovieBean moviesBean = new MovieBean(movieHandler);
+        CamelContext ctx = new DefaultCamelContext();
+        Exchange exchange = new DefaultExchange(ctx);
+        exchange.getIn().setHeader("id",1);
+        moviesBean.removeMovie(exchange);
+        verify(movieHandler, times(1)).removeMovie(1);
     }
 }
