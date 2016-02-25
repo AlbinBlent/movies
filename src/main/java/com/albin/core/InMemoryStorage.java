@@ -1,7 +1,5 @@
 package com.albin.core;
 
-import com.albin.api.MovieAlreadyExistsInDBException;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
